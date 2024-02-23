@@ -33,6 +33,6 @@ resource "google_sql_database" "database" {
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_user
 resource "google_sql_user" "user" {
   name     = random_string.cloudsql_user_name.result
-  instance = google_sql_database_instance.instance.name
+  instance = var.instance_name
   password = random_string.cloudsql_user_password.result
 }
