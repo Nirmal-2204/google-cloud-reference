@@ -7,12 +7,12 @@ output "port" {
 }
 
 output "username" {
-  value     = var.username
+  value     = google_sql_user.user.name
   sensitive = true
 }
 
 output "password" {
-  value     = var.password
+  value     = google_sql_user.user.password
   sensitive = true
 }
 
