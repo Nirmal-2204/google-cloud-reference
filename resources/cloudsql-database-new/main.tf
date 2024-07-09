@@ -1,22 +1,15 @@
-resource "random_string" "cloudsql_database_name" {
-  length  = 10
-  special = false
-  lower   = true
-  upper   = false
+ locals {
+  # Name restrictions https://cloud.google.com/sql/docs/postgres/instance-settings
+  # The total length of project-ID:instance-ID must be 98 characters or less.
+  default_name = substr("${var.app_id}-${var.env_id}", 0, 98 - length(var.project))
+
+  default_database = "main"
+  default_username = "cloudsql"
 }
 
-resource "random_string" "cloudsql_user_name" {
-  length  = 10
+resource "random_password" "password" {
+  length  = 16
   special = false
-  lower   = true
-  upper   = false
-}
-
-resource "random_string" "cloudsql_user_password" {
-  length  = 10
-  special = true
-  lower   = true
-  upper   = true
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/sql_database_instance
@@ -25,14 +18,14 @@ data "google_sql_database_instance" "instance" {
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database
-resource "google_sql_database" "database" {
-  name     = "database-${random_string.cloudsql_database_name.result}"
+resource "google_sql_database" "main" {
+  name     = local.default_name
   instance = var.instance_name
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_user
-resource "google_sql_user" "user" {
-  name     = random_string.cloudsql_user_name.result
+resource "google_sql_user" "main" {
+  name     = local.default_username
   instance = var.instance_name
-  password = random_string.cloudsql_user_password.result
+  password = random_password.password.result
 }
