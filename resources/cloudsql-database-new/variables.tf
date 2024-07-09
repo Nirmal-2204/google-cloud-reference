@@ -1,15 +1,41 @@
-variable "credentials" {
-  description = "The credentials for connecting to Google Cloud."
+variable "prefix" {
   type        = string
-  sensitive   = true
+  description = "Prefix for all resources"
 }
 
-variable "project_id" {
-  description = "ID of the Google Cloud Project"
+variable "project" {
+  description = "GCP project ID"
+  type        = string
+}
+
+variable "region" {
+  description = "GCP region"
   type        = string
 }
 
 variable "instance_name" {
-  description = "The Cloud SQL Instance name"
+  description = "GCP region"
   type        = string
+}
+
+variable "credentials" {
+  description = "GCP credentials"
+  type = string
+}
+
+variable "app_id" {
+  type = string
+}
+
+variable "env_id" {
+  type = string
+}
+
+variable "res_id" {
+  type = string
+}
+
+variable "port" {
+  type        = number
+  description = "The port for the database (needs to match the database type)"
 }
